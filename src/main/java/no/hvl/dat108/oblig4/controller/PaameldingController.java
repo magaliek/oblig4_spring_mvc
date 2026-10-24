@@ -8,6 +8,7 @@ import no.hvl.dat108.oblig4.model.Feilmeldinger;
 import no.hvl.dat108.oblig4.service.DeltagerDbService;
 import no.hvl.dat108.oblig4.service.LogginnService;
 import no.hvl.dat108.oblig4.service.PassordService;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,16 +16,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.stream.Collectors;
+
 @Controller
 public class PaameldingController {
 	
 	/*
 	 * GET /paamelding - Viser påmeldingsskjema vhja av aktuelt view
 	 */
-    //TODO - Annoteringen for å ta i mot requesten
+    @GetMapping("/paamelding")
     public String henteSkjema() {
-
-        //TODO - Skriv innholdet i denne metoden.
+		return "paamelding";
     }
     
 	/*
@@ -34,17 +36,24 @@ public class PaameldingController {
 	 *  - Logger inn
 	 *  - Går (redirecter) til påmeldingsbekreftelse
 	 */
-    //TODO - Annoteringen for å ta i mot requesten
+    @PostMapping("/paamelding")
     public String meldePaa(HttpServletRequest request, 
     		@Valid @ModelAttribute("deltager") DeltagerSkjema skjema,
-			BindingResult bindingResult) {
+			BindingResult bindingResult, RedirectAttributes ra) {
 
     	/* For å gjøre controller-metoden kortere, kan selve valideringen
     	 * skilles ut i en egen hjelpemetode (se nederst). Denne returnerer en
     	 * feilmelding om noe er galt, og null hvis alt er OK. */
     	String feilmelding = meldingFraInputValidering(skjema, bindingResult);
 
-        //TODO - Skriv resten av innholdet i denne metoden.
+		if (feilmelding == null) {
+			Deltager deltager = skjema.lagDeltager(PassordService.lagHashetPassord(skjema.getPassord()));
+			DeltagerDbService.lagreDeltager(deltager);
+			LogginnService.loggInnBruker(request, deltager);
+			return "redirect:/paameldt";
+		}
+		ra.addFlashAttribute("feilmelding", feilmelding);
+		return "redirect:/paamelding";
     }
 
 	/*
@@ -54,10 +63,13 @@ public class PaameldingController {
      * Hvis ikke bruker er innlogget, skal det gjøres er redirect til /innlogging
      * med en feilmelding satt som en flash-attributt.
      */
-    //TODO - Annoteringen for å ta i mot requesten
+    @GetMapping("/paameldt")
     public String hentePaameldt(HttpServletRequest request, RedirectAttributes ra) {
-
-        //TODO - Skriv innholdet i denne metoden.
+		if (LogginnService.erBrukerLoggetInn(request)) {
+			return "paameldt";
+		}
+		ra.addFlashAttribute("feilmelding", Feilmeldinger.KREVER_INNLOGGET_MLD);
+		return "redirect:/innlogging";
     }
     
 	/*
@@ -74,7 +86,9 @@ public class PaameldingController {
 	private String meldingFraInputValidering(DeltagerSkjema skjema, BindingResult bindingResult) {
 		String melding = null;    	
     	if (bindingResult.hasErrors()) {
-    		melding = Feilmeldinger.GENERELL_BINDING_MLD;
+    		melding = bindingResult.getAllErrors().stream().
+					map(DefaultMessageSourceResolvable::getDefaultMessage).
+					collect(Collectors.joining(". "));
     		//Kunne her hentet ut melding(er) fra bindingResult i stedet.
     		
     	} else if (!skjema.getPassord().equals(skjema.getPassordRepetert())) {

@@ -13,8 +13,12 @@ public class LogginnService {
      * @return
      */
     public static boolean erBrukerLoggetInn(HttpServletRequest request) {
-
-        //TODO - Skriv denne metoden.
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            return session.getAttribute("Innloggetbruker") != null;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -22,8 +26,11 @@ public class LogginnService {
      * @param request
      */
     public static void loggUtBruker(HttpServletRequest request) {
-
-        //TODO - Skriv denne metoden.
+        HttpSession  session = request.getSession(false);
+        if (session != null) {
+            session.removeAttribute("Innloggetbruker");
+            session.invalidate();
+        }
     }
 
     /**
@@ -32,8 +39,11 @@ public class LogginnService {
      * @param deltager Brukeren som skal logges inn
      */
     public static void loggInnBruker(HttpServletRequest request, Deltager deltager) {
-
-        //TODO - Skriv denne metoden.
+        if (request.getSession() != null) {
+            request.getSession().invalidate();
+        }
+        HttpSession  session = request.getSession();
+        session.setAttribute("Innloggetbruker", deltager);
     }
 
 
