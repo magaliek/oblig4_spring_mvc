@@ -20,7 +20,7 @@ public class InnUtloggingController {
 	 */
     @GetMapping("/innlogging")
 	public String henteSkjema() {
-		return "innlogging";
+		return "logginn";
 	}
 
 	/*
@@ -36,9 +36,9 @@ public class InnUtloggingController {
 			HttpServletRequest request, RedirectAttributes ra) {
 
 		Deltager d = DeltagerDbService.finnDeltagerMedMobil(mobil);
-		if (d != null && PassordService.erPassordKorrekt(passord, PassordService.lagHashetPassord(passord))) {
+		if (d != null && PassordService.erPassordKorrekt(passord, d.getHashetPassord())) {
 			LogginnService.loggInnBruker(request, d);
-			return "deltagerliste";
+			return "redirect:/deltagerliste";
 		} else {
 			ra.addFlashAttribute("feilmelding", Feilmeldinger.UGYLDIG_BRUKERNAVN_PASSORD_MLD);
 			return "redirect:/innlogging";

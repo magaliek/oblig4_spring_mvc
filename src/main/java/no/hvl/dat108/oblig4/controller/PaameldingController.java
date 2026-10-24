@@ -26,7 +26,7 @@ public class PaameldingController {
 	 */
     @GetMapping("/paamelding")
     public String henteSkjema() {
-		return "paamelding";
+		return "paameldingsskjema";
     }
     
 	/*
@@ -66,7 +66,7 @@ public class PaameldingController {
     @GetMapping("/paameldt")
     public String hentePaameldt(HttpServletRequest request, RedirectAttributes ra) {
 		if (LogginnService.erBrukerLoggetInn(request)) {
-			return "paameldt";
+			return "paameldingsbekreftelse";
 		}
 		ra.addFlashAttribute("feilmelding", Feilmeldinger.KREVER_INNLOGGET_MLD);
 		return "redirect:/innlogging";
