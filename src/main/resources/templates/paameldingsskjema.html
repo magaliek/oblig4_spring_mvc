@@ -12,25 +12,31 @@
 
 	<form method="post" th:action="@{/paamelding}" th:object="${deltager}">
 
+		<p th:if="${feil != null and feil['fornavn'] != null}" th:text="${feil['fornavn']}" style="color: red"></p>
 		<label for="fornavn">Fornavn</label>
 		<input id="fornavn" type="text" th:field="*{fornavn}">
 
+		<p th:if="${feil != null and feil['etternavn'] != null}" th:text="${feil['etternavn']}" style="color: red"></p>
 		<label for="etternavn">Etternavn</label>
 		<input id="etternavn" type="text" th:field="*{etternavn}">
 
+		<p th:if="${feil != null and feil['mobil'] != null}" th:text="${feil['mobil']}" style="color: red"></p>
 		<label for="mobil">Mobil</label>
 		<input id="mobil" type="tel" th:field="*{mobil}">
 
+		<p th:if="${feil != null and feil['passord'] != null}" th:text="${feil['passord']}" style="color: red"></p>
 		<label for="passord">Passord</label>
 		<input id="passord" type="password" th:field="*{passord}">
 
+		<p th:if="${feil != null and feil['passordRepetert'] != null}" th:text="${feil['passordRepetert']}" style="color: red"></p>
 		<label for="passordRepetert">Passord repetert</label>
 		<input id="passordRepetert" type="password" th:field="*{passordRepetert}">
 
 		<fieldset>
+			<p th:if="${feil != null and feil['kjonn'] != null}" th:text="${feil['kjonn']}" style="color: red"></p>
 			<legend>Kjønn</legend>
-			<label><input type="radio" th:field="*{kjonn}" value="Mann">Mann</label>
-			<label><input type="radio" th:field="*{kjonn}" value="Kvinne">Kvinne</label>
+			<label><input type="radio" th:field="*{kjonn}" value="mann">Mann</label>
+			<label><input type="radio" th:field="*{kjonn}" value="kvinne">Kvinne</label>
 		</fieldset>
 
 		<button type="submit">Meld meg på</button>

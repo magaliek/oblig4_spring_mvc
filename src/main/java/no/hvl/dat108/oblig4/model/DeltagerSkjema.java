@@ -27,7 +27,7 @@ public class DeltagerSkjema {
     public static final String ANY_CHARACTER = ".";
     public static final String A_CAPITAL_LETTER = "[A-ZÆØÅ]";
     public static final String A_DIGIT = "[0-9]";
-    public static final String MANN_ELLER_KVINNE = "(Mann|Kvinne)";
+    public static final String MANN_ELLER_KVINNE = "(mann|kvinne)";
 	public static final String FOUR_OR_MORE_TIMES = "{4,}";
     public static final String ONE_TO_19_TIMES = "{1,19}";
     public static final String EIGHT_TIMES = "{8}";

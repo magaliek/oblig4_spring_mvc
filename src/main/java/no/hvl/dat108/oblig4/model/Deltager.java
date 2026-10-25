@@ -50,7 +50,7 @@ public class Deltager {
     }
     
     public String getKjonnsymbol() {
-        return (getKjonn().equals("Mann") ? MANN_SYMBOL : KVINNE_SYMBOL);
+        return (getKjonn().equals("mann") ? MANN_SYMBOL : KVINNE_SYMBOL);
     }
     
     //---

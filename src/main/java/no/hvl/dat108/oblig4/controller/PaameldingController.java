@@ -10,12 +10,16 @@ import no.hvl.dat108.oblig4.service.LogginnService;
 import no.hvl.dat108.oblig4.service.PassordService;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -25,7 +29,8 @@ public class PaameldingController {
 	 * GET /paamelding - Viser påmeldingsskjema vhja av aktuelt view
 	 */
     @GetMapping("/paamelding")
-    public String henteSkjema() {
+    public String henteSkjema(Model model) {
+		model.addAttribute("deltager", new DeltagerSkjema());
 		return "paameldingsskjema";
     }
     
@@ -52,7 +57,12 @@ public class PaameldingController {
 			LogginnService.loggInnBruker(request, deltager);
 			return "redirect:/paameldt";
 		}
+        Map<String, String> feil = new HashMap<>();
+		for (FieldError fe : bindingResult.getFieldErrors()) {
+			feil.put(fe.getField(), fe.getDefaultMessage());
+		}
 		ra.addFlashAttribute("feilmelding", feilmelding);
+		ra.addFlashAttribute("feil", feil);
 		return "redirect:/paamelding";
     }
 
@@ -86,9 +96,7 @@ public class PaameldingController {
 	private String meldingFraInputValidering(DeltagerSkjema skjema, BindingResult bindingResult) {
 		String melding = null;    	
     	if (bindingResult.hasErrors()) {
-    		melding = bindingResult.getAllErrors().stream().
-					map(DefaultMessageSourceResolvable::getDefaultMessage).
-					collect(Collectors.joining(". "));
+    		melding = Feilmeldinger.GENERELL_BINDING_MLD;
     		//Kunne her hentet ut melding(er) fra bindingResult i stedet.
     		
     	} else if (!skjema.getPassord().equals(skjema.getPassordRepetert())) {

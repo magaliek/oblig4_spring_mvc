@@ -12,14 +12,14 @@
 
     <form method="post" th:action="@{/innlogging}">
         <fieldset>
-            <label for="mobil">Mobil:</label>
-            <input type="tel" name="mobil" id="mobil">
-            <label for="passord">Passord:</label>
-            <input type="password" name="passord" id="passord">
+            <label for="mobil">Mobil:</label><br>
+            <input type="tel" name="mobil" id="mobil"><br>
+            <label for="passord">Passord:</label><br>
+            <input type="password" name="passord" id="passord"><br>
         </fieldset>
         <button type="submit">Logg inn</button>
     </form>
 
-    <a th:href="@{/paameldingsskjema}">Gå til påmeldingsskjema</a>
+    <a th:href="@{/paamelding}">Gå til påmeldingsskjema</a>
 </body>
 </html>
