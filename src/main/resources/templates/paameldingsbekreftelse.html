@@ -9,9 +9,15 @@
 	<h2>Påmeldingsbekreftelse</h2>
 	<p>Påmeldingen er mottatt for</p>
 
-    <!-- TODO - Kvitteringen for påmeldt -->
+	<div th:object="${session.Innloggetbruker}">
+		<p th:text="*{fornavn}"></p>
+		<p th:text="*{etternavn}"></p>
+		<p th:text="*{mobilFormatert}"></p>
+		<p th:utext="*{kjonnsymbol}"></p>
+		<br>
+	</div>
 
-    <!-- TODO - Lenke til deltagerlisten -->
+	<a th:href="@{/deltagerliste}">Gå til deltagerliste</a>
 
 </body>
 </html>

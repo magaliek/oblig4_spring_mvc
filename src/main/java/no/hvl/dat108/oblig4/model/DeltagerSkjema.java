@@ -1,5 +1,6 @@
 package no.hvl.dat108.oblig4.model;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -23,29 +24,35 @@ public class DeltagerSkjema {
     public static final String STRING_START = "^";
     public static final String STRING_END = "$";
     public static final String A_LETTER_SPACE_OR_HYPHEN = "[a-zA-ZæøåÆØÅ -]";
-    public static final String A_LETTER_OR_HYPHEN = "[a-zA-ZæøåÆØÅ-]";
+    public static final String ANY_CHARACTER = ".";
     public static final String A_CAPITAL_LETTER = "[A-ZÆØÅ]";
     public static final String A_DIGIT = "[0-9]";
-    public static final String ZERO_OR_MORE_TIMES = "*";
+    public static final String MANN_ELLER_KVINNE = "(Mann|Kvinne)";
+	public static final String FOUR_OR_MORE_TIMES = "{4,}";
     public static final String ONE_TO_19_TIMES = "{1,19}";
     public static final String EIGHT_TIMES = "{8}";
 
-    //TODO - Annotér med valideringsregler /-krav
+    @NotBlank
+	@Pattern(regexp = STRING_START+A_CAPITAL_LETTER+A_LETTER_SPACE_OR_HYPHEN+ONE_TO_19_TIMES+STRING_END, message=Feilmeldinger.UGYLDIG_FORNAVN_MLD)
 	private String fornavn;
 
-    //TODO - Annotér med valideringsregler /-krav
+    @NotBlank
+	@Pattern(regexp = STRING_START+A_CAPITAL_LETTER+A_LETTER_SPACE_OR_HYPHEN+ONE_TO_19_TIMES+STRING_END, message=Feilmeldinger.UGYLDIG_ETTERNAVN_MLD)
 	private String etternavn;
 
-    //TODO - Annotér med valideringsregler /-krav
+    @NotBlank
+	@Pattern(regexp=STRING_START+A_DIGIT+EIGHT_TIMES+STRING_END, message = Feilmeldinger.UGYLDIG_MOBIL_MLD)
 	private String mobil;
 
-    //TODO - Annotér med valideringsregler /-krav
+    @NotBlank
+	@Pattern(regexp=STRING_START+ANY_CHARACTER+FOUR_OR_MORE_TIMES+STRING_END, message=Feilmeldinger.UGYLDIG_PASSORD_MLD)
 	private String passord;
     
     //Denne valideres programmatisk i PaameldingController
 	private String passordRepetert;
 
-    //TODO - Annotér med valideringsregler /-krav
+    @NotBlank
+	@Pattern(regexp = STRING_START+MANN_ELLER_KVINNE+STRING_END, message = Feilmeldinger.UGYLDIG_KJONN_MLD)
 	private String kjonn;
 	
 	//---

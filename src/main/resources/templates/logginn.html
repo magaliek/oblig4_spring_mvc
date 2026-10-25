@@ -8,9 +8,18 @@
 <body>
 	<h2>Logg inn</h2>
 
-    <!-- TODO - Eventuell feilmelding med rød tekst -->
+    <p th:if="${feilmelding}" th:text="${feilmelding}" style="color: red"></p>
 
-    <!-- TODO - Innloggingsskjemaet -->
+    <form method="post" th:action="@{/innlogging}">
+        <fieldset>
+            <label for="mobil">Mobil:</label>
+            <input type="tel" name="mobil" id="mobil">
+            <label for="passord">Passord:</label>
+            <input type="password" name="passord" id="passord">
+        </fieldset>
+        <button type="submit">Logg inn</button>
+    </form>
 
+    <a th:href="@{/paameldingsskjema}">Gå til påmeldingsskjema</a>
 </body>
 </html>
