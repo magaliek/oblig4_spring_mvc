@@ -8,6 +8,7 @@ import no.hvl.dat108.oblig4.model.Feilmeldinger;
 import no.hvl.dat108.oblig4.service.DeltagerDbService;
 import no.hvl.dat108.oblig4.service.LogginnService;
 import no.hvl.dat108.oblig4.service.PassordService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,15 @@ import java.util.stream.Collectors;
 
 @Controller
 public class PaameldingController {
+
+	@Autowired
+	private DeltagerDbService deltagerDbService;
+
+	@Autowired
+	private LogginnService logginnService;
+
+	@Autowired
+	private PassordService passordService;
 	
 	/*
 	 * GET /paamelding - Viser påmeldingsskjema vhja av aktuelt view
@@ -52,9 +62,9 @@ public class PaameldingController {
     	String feilmelding = meldingFraInputValidering(skjema, bindingResult);
 
 		if (feilmelding == null) {
-			Deltager deltager = skjema.lagDeltager(PassordService.lagHashetPassord(skjema.getPassord()));
-			DeltagerDbService.lagreDeltager(deltager);
-			LogginnService.loggInnBruker(request, deltager);
+			Deltager deltager = skjema.lagDeltager(passordService.lagHashetPassord(skjema.getPassord()));
+			deltagerDbService.lagreDeltager(deltager);
+			logginnService.loggInnBruker(request, deltager);
 			return "redirect:/paameldt";
 		}
         Map<String, String> feil = new HashMap<>();
@@ -75,7 +85,7 @@ public class PaameldingController {
      */
     @GetMapping("/paameldt")
     public String hentePaameldt(HttpServletRequest request, RedirectAttributes ra) {
-		if (LogginnService.erBrukerLoggetInn(request)) {
+		if (logginnService.erBrukerLoggetInn(request)) {
 			return "paameldingsbekreftelse";
 		}
 		ra.addFlashAttribute("feilmelding", Feilmeldinger.KREVER_INNLOGGET_MLD);
@@ -102,7 +112,7 @@ public class PaameldingController {
     	} else if (!skjema.getPassord().equals(skjema.getPassordRepetert())) {
     		melding = Feilmeldinger.FEIL_REPETERT_PASSORD_MLD;
     		
-    	} else if (DeltagerDbService.erDeltagerPaameldt(skjema.getMobil())) {
+    	} else if (deltagerDbService.erDeltagerPaameldt(skjema.getMobil())) {
     		melding = Feilmeldinger.ALLEREDE_PAAMELDT_MLD;
     	}
 		return melding;

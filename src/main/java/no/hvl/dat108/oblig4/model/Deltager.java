@@ -1,7 +1,14 @@
 package no.hvl.dat108.oblig4.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.Comparator;
 
+@Entity
+@Table(schema = "dat108_oblig5_h26")
 public class Deltager {
     
     private static final String MANN_SYMBOL = "&#9794;";    // Unicode, symbol for mann
@@ -12,7 +19,7 @@ public class Deltager {
     		= Comparator.comparing(Deltager::getFulltNavn); 
     
     //---
-    
+    @Id
     private String mobil;
     private String hashetPassord;
     private String fornavn;

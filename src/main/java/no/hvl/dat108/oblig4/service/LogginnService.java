@@ -3,8 +3,9 @@ package no.hvl.dat108.oblig4.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import no.hvl.dat108.oblig4.model.Deltager;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class LogginnService {
 
     /**
@@ -12,7 +13,7 @@ public class LogginnService {
      * @param request
      * @return
      */
-    public static boolean erBrukerLoggetInn(HttpServletRequest request) {
+    public boolean erBrukerLoggetInn(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             return session.getAttribute("Innloggetbruker") != null;
@@ -25,7 +26,7 @@ public class LogginnService {
      * Logger ut evt. innlogget bruker fra gjeldende request/sesjon
      * @param request
      */
-    public static void loggUtBruker(HttpServletRequest request) {
+    public void loggUtBruker(HttpServletRequest request) {
         HttpSession  session = request.getSession(false);
         if (session != null) {
             session.removeAttribute("Innloggetbruker");
@@ -38,7 +39,7 @@ public class LogginnService {
      * @param request
      * @param deltager Brukeren som skal logges inn
      */
-    public static void loggInnBruker(HttpServletRequest request, Deltager deltager) {
+    public void loggInnBruker(HttpServletRequest request, Deltager deltager) {
         if (request.getSession() != null) {
             request.getSession().invalidate();
         }

@@ -3,6 +3,7 @@ package no.hvl.dat108.oblig4.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import no.hvl.dat108.oblig4.service.DeltagerDbService;
 import no.hvl.dat108.oblig4.service.LogginnService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,12 @@ import no.hvl.dat108.oblig4.model.Feilmeldinger;
 
 @Controller
 public class DeltagerlisteController {
+
+	@Autowired
+	DeltagerDbService deltagerDbService;
+
+	@Autowired
+	LogginnService logginnService;
 	
 	/**
 	 * GET /deltagerliste - Henter deltagerlisten og spiller ballen videre til
@@ -24,12 +31,12 @@ public class DeltagerlisteController {
     public String henteDeltagerliste(HttpServletRequest request, Model model,
 									 RedirectAttributes ra) {
 
-        if (!LogginnService.erBrukerLoggetInn(request)) {
+        if (!logginnService.erBrukerLoggetInn(request)) {
 			ra.addFlashAttribute("feilmelding", Feilmeldinger.KREVER_INNLOGGET_MLD);
 			return "redirect:/innlogging";
 		}
 
-		model.addAttribute("deltagere", DeltagerDbService.finnAlleSortertPaaFulltNavn());
+		model.addAttribute("deltagere", deltagerDbService.finnAlleSortertPaaFulltNavn());
 		model.addAttribute("Innloggetbruker", request.getSession().getAttribute("Innloggetbruker"));
 		return "deltagerliste";
     }

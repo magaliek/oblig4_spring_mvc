@@ -1,6 +1,7 @@
 package no.hvl.dat108.oblig4.service;
 
 import jakarta.xml.bind.DatatypeConverter;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -18,6 +19,7 @@ import java.security.spec.InvalidKeySpecException;
 	</dependency>
 */
 
+@Service
 public class PassordService {
 
 	private final static String DEFAULT_SALT = "ABCD";
@@ -28,7 +30,7 @@ public class PassordService {
      * PS! Ikke optimalt å bruke DEAFULT_SALT, men gjort slik for å forenkle
      * oppgaven.
      */
-    public static String lagHashetPassord(String passordKlartekst) {
+    public String lagHashetPassord(String passordKlartekst) {
         return hashMedSalt(passordKlartekst, DEFAULT_SALT);
     }
 
@@ -40,7 +42,7 @@ public class PassordService {
 	 * @param hashetPassord - Det "lagrete" hashede passordet
 	 * @return om passordet matcher
 	 */
-	public static boolean erPassordKorrekt(
+	public boolean erPassordKorrekt(
 			String passord, String hashetPassord) {
 		
 		if (passord == null || hashetPassord == null) { //Burde validert skikkelig!!
@@ -52,7 +54,7 @@ public class PassordService {
     /**
      * @return et tilfeldig generert 16 bytes salt ved å bruke SHA1PRNG
      */
-    private static String genererTilfeldigSalt() {
+    private String genererTilfeldigSalt() {
         SecureRandom sr;
         byte[] salt = new byte[16];
         try {
@@ -83,7 +85,7 @@ public class PassordService {
      * @param salt
      * @return en 64 tegn lang HEX-streng som representerer en 32 byte/256 bit hash.
      */
-    private static String hashMedSalt(String passord, String salt) {
+    private String hashMedSalt(String passord, String salt) {
 
         if (passord == null || salt == null) { //Burde validert skikkelig!!
             throw new IllegalArgumentException();

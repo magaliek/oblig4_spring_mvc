@@ -6,6 +6,7 @@ import no.hvl.dat108.oblig4.model.Feilmeldinger;
 import no.hvl.dat108.oblig4.service.DeltagerDbService;
 import no.hvl.dat108.oblig4.service.LogginnService;
 import no.hvl.dat108.oblig4.service.PassordService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class InnUtloggingController {
+
+	@Autowired
+	private DeltagerDbService deltagerDbService;
+
+	@Autowired
+	private LogginnService logginnService;
 
 	/*
 	 * GET /innlogging - Viser innloggingsskjemaet vhja logginn-viewet.
@@ -35,9 +42,9 @@ public class InnUtloggingController {
 	public String loggeInn(@RequestParam String mobil, @RequestParam String passord, 
 			HttpServletRequest request, RedirectAttributes ra) {
 
-		Deltager d = DeltagerDbService.finnDeltagerMedMobil(mobil);
+		Deltager d = deltagerDbService.finnDeltagerMedMobil(mobil);
 		if (d != null && PassordService.erPassordKorrekt(passord, d.getHashetPassord())) {
-			LogginnService.loggInnBruker(request, d);
+			logginnService.loggInnBruker(request, d);
 			return "redirect:/deltagerliste";
 		} else {
 			ra.addFlashAttribute("feilmelding", Feilmeldinger.UGYLDIG_BRUKERNAVN_PASSORD_MLD);
@@ -52,7 +59,7 @@ public class InnUtloggingController {
 	 */
     @PostMapping("/utlogging")
 	public String loggeUt(HttpServletRequest request, RedirectAttributes ra) {
-		LogginnService.loggUtBruker(request);
+		logginnService.loggUtBruker(request);
 		ra.addFlashAttribute("feilmelding", Feilmeldinger.UTLOGGET_MLD);
 		return "redirect:/innlogging";
 	}

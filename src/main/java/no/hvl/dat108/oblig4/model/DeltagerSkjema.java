@@ -105,5 +105,4 @@ public class DeltagerSkjema {
 	public void setKjonn(String kjonn) {
 		this.kjonn = kjonn;
 	}
-
 }
