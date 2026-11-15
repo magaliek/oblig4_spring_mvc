@@ -29,7 +29,7 @@ public class DeltagerDbService {
      * @return Alle deltagerne, sortert stigende på fullt navn.
      */
     public List<Deltager> finnAlleSortertPaaFulltNavn() {
-        return deltagerDb.findAll(Sort.by("fulltNavn").ascending());
+        return deltagerDb.findAll().stream().sorted(Deltager.paaFulltNavn).toList();
     }
 
     /**
@@ -45,7 +45,7 @@ public class DeltagerDbService {
      * @param deltager
      */
     public void lagreDeltager(Deltager deltager) {
-        if (deltagerDb.existsById(deltager.getMobil())) {
+        if (!deltagerDb.existsById(deltager.getMobil())) {
             deltagerDb.save(deltager);
         }
     }

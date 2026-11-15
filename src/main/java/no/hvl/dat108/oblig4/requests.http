@@ -1,0 +1,48 @@
+GET http://localhost:8080/api/deltagere
+Api-Key: topsecret
+
+###
+
+GET http://localhost:8080/api/deltagere
+Api-Key: wrongkey
+
+###
+
+POST http://localhost:8080/api/deltagere
+Api-Key: topsecret
+Content-Type: application/json
+
+{
+    "mobil": "92517167",
+    "passord": "momIlove8",
+    "fornavn": "Noor",
+    "etternavn": "Larson",
+    "kjonn": "kvinne"
+}
+
+###
+
+POST http://localhost:8080/api/deltagere
+Api-Key: topsecret
+Content-Type: application/json
+
+{
+    "mobil": "92517167",
+    "passord": "momIlove8",
+    "fornavn": "Noor",
+    "etternavn": "Larson",
+    "kjonn": "kvinne"
+}
+
+###
+
+GET http://localhost:8080/api/deltagere/92517167
+Api-Key: topsecret
+
+###
+
+GET http://localhost:8080/api/deltagere/92517169
+Api-Key: topsecret
+
+###
+

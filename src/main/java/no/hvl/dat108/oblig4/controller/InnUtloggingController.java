@@ -22,6 +22,9 @@ public class InnUtloggingController {
 	@Autowired
 	private LogginnService logginnService;
 
+	@Autowired
+	private PassordService passordService;
+
 	/*
 	 * GET /innlogging - Viser innloggingsskjemaet vhja logginn-viewet.
 	 */
@@ -43,7 +46,7 @@ public class InnUtloggingController {
 			HttpServletRequest request, RedirectAttributes ra) {
 
 		Deltager d = deltagerDbService.finnDeltagerMedMobil(mobil);
-		if (d != null && PassordService.erPassordKorrekt(passord, d.getHashetPassord())) {
+		if (d != null && passordService.erPassordKorrekt(passord, d.getHashetPassord())) {
 			logginnService.loggInnBruker(request, d);
 			return "redirect:/deltagerliste";
 		} else {

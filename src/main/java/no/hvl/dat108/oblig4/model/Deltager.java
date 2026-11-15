@@ -1,5 +1,6 @@
 package no.hvl.dat108.oblig4.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -21,6 +22,8 @@ public class Deltager {
     //---
     @Id
     private String mobil;
+
+    @Column(name="passordhash")
     private String hashetPassord;
     private String fornavn;
     private String etternavn;
